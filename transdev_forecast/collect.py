@@ -24,6 +24,6 @@ def requete():
         value TEXT)
     ''')
 
-    cursor.execute("INSERT INTO `trigger` (value) VALUES ('fonctionne')")
+    cursor.execute("INSERT INTO `trigger` (value) VALUES ('fonctionne bien !')")
     conn.commit()
     print("Donnée insérée avec succès !")
