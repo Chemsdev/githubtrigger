@@ -1,30 +1,35 @@
+import os
 import mysql.connector
 import logging
 
-def db_connect(host: str, user: str, password: str, database: str):
-    db = mysql.connector.connect(
+def db_connect():
+    host = os.environ.get("DB_HOST")
+    user = os.environ.get("DB_USER")
+    password = os.environ.get("DB_PASSWORD")
+    database = os.environ.get("DB_DATABASE")
+
+    conn = mysql.connector.connect(
         host=host,
         user=user,
         password=password,
         database=database
     )
-    return db
+    return conn
 
 def requete():
-    conn = db_connect(
-        host="chemsdineserver.mysql.database.azure.com",
-        user="chemsdine",
-        password="Ounissi69800",
-        database="bdd_trigger"
-    )
+    conn = db_connect()
     cursor = conn.cursor()
 
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS `trigger`
-        (id INT AUTO_INCREMENT PRIMARY KEY,
-        value TEXT)
-    ''')
+    create_table_query = '''
+        CREATE TABLE IF NOT EXISTS `trigger` (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            value TEXT
+        )
+    '''
+    cursor.execute(create_table_query)
 
-    cursor.execute("INSERT INTO `trigger` (value) VALUES ('fonctionne biennnn !')")
+    insert_query = "INSERT INTO `trigger` (value) VALUES ('Injection')"
+    cursor.execute(insert_query)
     conn.commit()
+
     logging.info("Donnée insérée avec succès !")
